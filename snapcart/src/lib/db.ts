@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
-const mongodbUrl = process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/snapcart";
+const mongodbUrl =
+    process.env.MONGODB_URL || (process.env.NODE_ENV === "development" ? "mongodb://127.0.0.1:27017/snapcart" : undefined);
 
 if (!mongodbUrl) {
     console.error(
-        "MONGODB_URL is not set. Please add your MongoDB Atlas connection string to .env.local as MONGODB_URL."
+        "MONGODB_URL is not set. In production you must set MONGODB_URL to your MongoDB Atlas connection string."
     );
     throw new Error("Missing MONGODB_URL");
 }
