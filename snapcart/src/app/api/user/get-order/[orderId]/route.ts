@@ -3,21 +3,21 @@ import Order from "@/models/order.model"
 import DeliveryAssignment from "@/models/deliveryAssignment.model"
 import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(req:NextRequest,context: { params: Promise<{ orderId: string; }>; }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ orderId: string }> }) {
     try {
         await connectDb()
-        const {orderId}=await context.params
+        const { orderId } = await params
         console.log(orderId)
         const order=await Order.findById(orderId).populate("assignedDeliveryBoy")
         if(!order){
             return NextResponse.json(
-                {message:"order not found"},
-               {status:400}
+                { message: "order not found" },
+               { status: 404 }
             )
         }
         // also fetch assignment details if present
         let assignment = null
-        if(order.assignment){
+        if (order.assignment) {
             assignment = await DeliveryAssignment.findById(order.assignment).populate('assignedTo')
         }
 
