@@ -4,10 +4,13 @@ import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe=new Stripe(process.env.STRIPE_SECRET_KEY!)
-
 export async function POST(req:NextRequest) {
     try {
+    const stripeSecret = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecret) {
+      return NextResponse.json({ message: "Stripe secret not configured" }, { status: 500 })
+    }
+    const stripe = new Stripe(stripeSecret, { apiVersion: '2022-11-15' })
           await connectDb()
         const { userId, items, paymentMethod, totalAmount, address } = await req.json()
         if (!items || !userId || !paymentMethod || !totalAmount || !address) {
