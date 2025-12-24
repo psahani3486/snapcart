@@ -10,7 +10,7 @@ export async function POST(req:NextRequest) {
     if (!stripeSecret) {
       return NextResponse.json({ message: "Stripe secret not configured" }, { status: 500 })
     }
-    const stripe = new Stripe(stripeSecret, { apiVersion: '2022-11-15' })
+    const stripe = new Stripe(stripeSecret, { apiVersion: '2025-11-17.clover' })
           await connectDb()
         const { userId, items, paymentMethod, totalAmount, address } = await req.json()
         if (!items || !userId || !paymentMethod || !totalAmount || !address) {
